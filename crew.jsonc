@@ -1,0 +1,231 @@
+{
+  // Display name for this crew
+  "name": "manufacturing_incident_crew",
+
+  // Agents to include — each must have a matching agents/<name>.jsonc file
+  "agents": [
+    "manufacturing_incident_analyst",
+    "root_cause_analysis_specialist",
+    "corrective_action_planner",
+    "manufacturing_incident_report_",
+  ],
+
+  // Task definitions — executed in order for sequential process
+  "tasks": [
+    {
+      // Task identifier
+      "name": "analyze_the_following_manufacturing_task",
+
+      // What the task should accomplish
+      // Use {placeholder} inputs here; crewai run prompts for missing values
+      "description": "Analyze the following manufacturing incident: {incident}. Extract and organize all important information including the affected equipment, observed symptoms, abnormal conditions, sequence of events, operational impact, and relevant technical observations. Do not assume facts that are not provided.",
+
+      // Clear definition of what the output should look like
+      "expected_output": "A structured incident analysis containing: incident summary, affected equipment, observed symptoms, abnormal conditions, sequence of events, operational impact, and key technical observations. Clearly distinguish provided facts from any assumptions and avoid determining the root cause at this stage.",
+
+      // Optional task guardrail(s) validate output before completion
+      // Use "guardrail" for one rule or "guardrails" for many
+      // Failed guardrails retry up to guardrail_max_retries times
+      // "guardrail": "Every factual claim needs context support.",
+      // "guardrails": [
+      //   "Every factual claim must be supported by context.",
+      //   "The answer must match the expected output format."
+      // ],
+      // "guardrail_max_retries": 2,
+
+      // Advanced task options:
+      // Docs: https://docs.crewai.com/concepts/tasks
+      // "type": "ConditionalTask",
+      // "condition": { "python": "my_project.conditions.should_run" },
+      // "output_json": { "python": "my_project.models.ReportOutput" },
+      // "output_pydantic": null,
+      // "response_model": null,
+      // "converter_cls": { "python": "my_project.converters.CustomConverter" },
+      // "markdown": false,
+      // "input_files": { "brief": "data/brief.txt" },
+      // "security_config": {},
+
+      // Which agent handles this task
+      "agent": "manufacturing_incident_analyst",
+
+      // "tools": [],
+      // "human_input": false,
+      // "async_execution": false
+    },
+    {
+      // Task identifier
+      "name": "using_the_manufacturing_incident_task",
+
+      // What the task should accomplish
+      // Use {placeholder} inputs here; crewai run prompts for missing values
+      "description": "Using the manufacturing incident analysis from the previous task, identify the most probable root causes of the incident. Analyze the relationship between the observed symptoms, equipment conditions, and operational events. Provide technically reasoned possible causes, rank them by likelihood, and clearly state when a conclusion is based on limited evidence.",
+
+      // Clear definition of what the output should look like
+      "expected_output": "A structured root cause analysis containing the most probable root cause, supporting evidence, contributing factors, alternative possible causes, and reasoning for each conclusion. Clearly identify any assumptions or additional information required to confirm the root cause.",
+
+      // Optional task guardrail(s) validate output before completion
+      // Use "guardrail" for one rule or "guardrails" for many
+      // Failed guardrails retry up to guardrail_max_retries times
+      // "guardrail": "Every factual claim needs context support.",
+      // "guardrails": [
+      //   "Every factual claim must be supported by context.",
+      //   "The answer must match the expected output format."
+      // ],
+      // "guardrail_max_retries": 2,
+
+      // Advanced task options:
+      // Docs: https://docs.crewai.com/concepts/tasks
+      // "type": "ConditionalTask",
+      // "condition": { "python": "my_project.conditions.should_run" },
+      // "output_json": { "python": "my_project.models.ReportOutput" },
+      // "output_pydantic": null,
+      // "response_model": null,
+      // "converter_cls": { "python": "my_project.converters.CustomConverter" },
+      // "markdown": false,
+      // "input_files": { "brief": "data/brief.txt" },
+      // "security_config": {},
+
+      // Which agent handles this task
+      "agent": "root_cause_analysis_specialist",
+
+      // Task outputs used as context
+      "context": ["analyze_the_following_manufacturing_task"],
+
+      // "tools": [],
+      // "human_input": false,
+      // "async_execution": false
+    },
+    {
+      // Task identifier
+      "name": "using_the_incident_analysis_task",
+
+      // What the task should accomplish
+      // Use {placeholder} inputs here; crewai run prompts for missing values
+      "description": "Using the incident analysis and root cause analysis from the previous tasks, develop appropriate corrective and preventive actions. Recommend immediate containment actions, actions to address the probable root cause, and long-term preventive measures to reduce the likelihood of recurrence. Prioritize safety, equipment reliability, and practical implementation.",
+
+      // Clear definition of what the output should look like
+      "expected_output": "A structured action plan containing: a concise incident summary, the probable root cause and contributing factors received from the previous analysis, immediate containment actions, corrective actions, preventive actions, recommended monitoring or inspection activities, and priorities. Preserve important upstream findings so they can be used by the final report writer.",
+
+      // Optional task guardrail(s) validate output before completion
+      // Use "guardrail" for one rule or "guardrails" for many
+      // Failed guardrails retry up to guardrail_max_retries times
+      // "guardrail": "Every factual claim needs context support.",
+      // "guardrails": [
+      //   "Every factual claim must be supported by context.",
+      //   "The answer must match the expected output format."
+      // ],
+      // "guardrail_max_retries": 2,
+
+      // Advanced task options:
+      // Docs: https://docs.crewai.com/concepts/tasks
+      // "type": "ConditionalTask",
+      // "condition": { "python": "my_project.conditions.should_run" },
+      // "output_json": { "python": "my_project.models.ReportOutput" },
+      // "output_pydantic": null,
+      // "response_model": null,
+      // "converter_cls": { "python": "my_project.converters.CustomConverter" },
+      // "markdown": false,
+      // "input_files": { "brief": "data/brief.txt" },
+      // "security_config": {},
+
+      // Which agent handles this task
+      "agent": "corrective_action_planner",
+
+      // Task outputs used as context
+      "context": ["using_the_manufacturing_incident_task"],
+
+      // "tools": [],
+      // "human_input": false,
+      // "async_execution": false
+    },
+    {
+      // Task identifier
+      "name": "using_the_incident_analysis_task_2",
+
+      // What the task should accomplish
+      // Use {placeholder} inputs here; crewai run prompts for missing values
+      "description": "Using the complete analysis and action plan provided in the context from the previous task, prepare the final professional manufacturing incident report. Treat the supplied context as the source material. Do not request additional files or ask the user to provide previous task outputs. Do not invent facts that are absent from the supplied context. Clearly label uncertain conclusions as requiring verification.",
+
+      // Clear definition of what the output should look like
+      "expected_output": "A complete professional manufacturing incident report in Markdown. Include the sections: Executive Summary, Incident Details, Observed Symptoms, Technical Analysis, Probable Root Cause, Contributing Factors, Immediate Containment Actions, Corrective Actions, Preventive Actions, Recommended Monitoring, Verification Requirements, and Conclusion. Use concise paragraphs and bullet points where appropriate. Clearly distinguish confirmed incident facts from AI-generated hypotheses requiring engineering verification. Return the completed report directly and do not ask the user for additional information.",
+
+      // Optional task guardrail(s) validate output before completion
+      // Use "guardrail" for one rule or "guardrails" for many
+      // Failed guardrails retry up to guardrail_max_retries times
+      // "guardrail": "Every factual claim needs context support.",
+      // "guardrails": [
+      //   "Every factual claim must be supported by context.",
+      //   "The answer must match the expected output format."
+      // ],
+      // "guardrail_max_retries": 2,
+
+      // Advanced task options:
+      // Docs: https://docs.crewai.com/concepts/tasks
+      // "type": "ConditionalTask",
+      // "condition": { "python": "my_project.conditions.should_run" },
+      // "output_json": { "python": "my_project.models.ReportOutput" },
+      // "output_pydantic": null,
+      // "response_model": null,
+      // "converter_cls": { "python": "my_project.converters.CustomConverter" },
+      // "markdown": false,
+      // "input_files": { "brief": "data/brief.txt" },
+      // "security_config": {},
+
+      // Which agent handles this task
+      "agent": "manufacturing_incident_report_",
+
+      // Task outputs used as context
+      "context": ["using_the_incident_analysis_task"],
+
+      // "tools": [],
+      // "human_input": false,
+      // "async_execution": false
+    },
+  ],
+
+  // Execution process
+  // "sequential" — tasks run in order, each receiving prior task outputs
+  // "hierarchical" — a manager agent delegates tasks (requires manager_llm)
+  "process": "sequential",
+
+  // Enable verbose logging during execution
+  "verbose": true,
+
+  // Enable crew memory — persists context and learnings across tasks
+  "memory": false,
+
+  // Automatically plan the execution strategy before running tasks
+  // "planning": false,
+
+  // LLM for the planning step (used when planning is true)
+  // "planning_llm": "openai/gpt-4o",
+
+  // LLM for the manager agent (required when process is "hierarchical")
+  // "manager_llm": "openai/gpt-4o",
+
+  // Crew-level LLM fields also accept object form for custom endpoints
+  // "chat_llm": {"model": "llama3", "provider": "ollama", "base_url": "http://localhost:11434"},
+
+  // Advanced crew options:
+  // Docs: https://docs.crewai.com/concepts/crews
+  // For hierarchical crews, manager_agent can reference an agents/<name>.jsonc file
+  // that is not included in the "agents" list.
+  // "manager_agent": "manufacturing_incident_analyst",
+  // "before_kickoff_callbacks": [{"python": "my_project.callbacks.before_kickoff"}],
+  // "after_kickoff_callbacks": [{"python": "my_project.callbacks.after_kickoff"}],
+  // "function_calling_llm": "openai/gpt-4o-mini",
+  // "max_rpm": null,
+  // "cache": true,
+  // "knowledge_sources": [],
+  // "embedder": {},
+  // "output_log_file": "crew.log",
+  // "stream": false,
+  // "tracing": false,
+  // "security_config": {},
+
+  // Optional runtime input defaults.
+  // Use {placeholder} in agent or task text, for example:
+  // "description": "Research {topic} and write a brief"
+  // `crewai run` prompts for any placeholders missing from this object.
+  "inputs": {},
+}
